@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Button, Text, View, Image, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 import { userState } from '../recoil/atoms/auth';
@@ -28,16 +28,23 @@ export default function HomeScreen() {
   };
 
   return (
-    <View>
-      <Text>Hello Home</Text>
-      <Text>{currentUserState.access_token}</Text>
-      {movies.map((movie) => (
-        <Text key={movie.id}>
-          {movie.title} - {movie.year}
-        </Text>
-      ))}
-      <Button title="Logout" onPress={() => logout()} />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Filmes Brabos</Text>
+        {movies.map((movie) => (
+          <View key={movie.id} style={styles.movies}>
+            <Text style={styles.movieTitle}>
+              {movie.title} - {movie.year}
+            </Text>
+            <Text style={styles.movieGenre}>
+              {movie.genre}
+            </Text>
+            <Image source={{ uri: movie.poster }} style={{ width: 200, height: 300 }} />
+          </View>
+        ))}
+        <Button title="Logout" onPress={() => logout()} />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -47,5 +54,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: { 
+    fontSize: 20, 
+    fontWeight: 'bold'
+  },
+  movies: {
+    margin: 10,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  movieTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  movieGenre: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontStyle: 'italic',
   },
 });
